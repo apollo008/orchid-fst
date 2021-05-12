@@ -1,0 +1,198 @@
+ "Clearer / Iosifovich: Blazingly fast levenshtein distance function". Archived from the original on 12 June 2018. It gets it's [sic] speed from using very little memory, often keeping the buffer entirely in cache, and reducing the amount of work by skipping any prefix and postfix that won't add to the cost. [...] The point is, you only really need to know the three values when you want to update a cell in the matrix and you can keep two of them in a buffer, while keeping the third value in a fixed location. Live descendent code.
+      , lDistance s' (b:t') -- Character is deleted  (a deleted)
+      , lDistance s' t'     -- Character is replaced (a replaced with b)
+        //   edit distance is delete (i+1) chars from s to match empty t
+    // after the last swap, the results of v1 are now in v0
+  // by inserting every character
+        // calculate v1 (current row distances) from the previous row v0
+            // calculating costs for A[i+1][j+1]
+        // copy v1 (current row) to v0 (previous row) for next iteration
+    // create two work vectors of integer distances
+  // dropping all characters
+        // first element of v1 is A[i+1][0]
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+    // initialize v0 (the previous row of distances)
+        // since data in v1 is always invalidated, a swap without copy could be more efficient
+  // source prefixes can be transformed into empty string by
+  // target prefixes can be reached from empty source prefix
+    // the distance is just the number of characters to delete from t
+  // the first i characters of s and the first j characters of t
+    // this row is A[0][i]: edit distance for an empty s
+        // use formula to fill in the rest of the row
+0	1	2	3	4	5	6
+0	1	2	3	4	5	6	7	8
+1	Definition
+    1 + minimum             -- Otherwise try all three possible actions and select the best one
+1.1	Example
+1.2	Upper and lower bounds
+2	Applications
+3	Relationship with other edit distance metrics
+4	Computing Levenshtein distance
+4.1	Recursive
+4.2	Iterative with full matrix
+4.3	Iterative with two matrix rows
+4.4	Adaptive variant
+4.5	Automata
+4.6	Approximation
+4.7	Computational complexity
+5	See also
+6	References
+7	External links
+A more efficient method would never repeat the same distance calculation. For example, the Levenshtein distance of all possible prefixes might be stored in an array {\displaystyle M}M where {\displaystyle M[i][j]}{\displaystyle M[i][j]} is the distance between the last {\displaystyle i}i characters of string s and the last {\displaystyle j}j characters of string t. The table is easy to construct one row at a time starting with row 0. When the entire table has been built, the desired distance is in the table in the last row and column, representing the distance between all of the characters in s and all the characters in t.
+Adaptive variant
+An example where the Levenshtein distance between two strings of the same length is strictly less than the Hamming distance is given by the pair "flaw" and "lawn". Here the Levenshtein distance equals 2 (delete "f" from the front; insert "n" at the end). The Hamming distance is 4.
+ Andoni, Alexandr; Krauthgamer, Robert; Onak, Krzysztof (2010). Polylogarithmic approximation for edit distance and the asymmetric query complexity. IEEE Symp. Foundations of Computer Science (FOCS). arXiv:1005.4033. Bibcode:2010arXiv1005.4033A. CiteSeerX 10.1.1.208.2079.
+Applications
+Approximation
+Automata
+ Backurs, Arturs; Indyk, Piotr (2015). Edit Distance Cannot Be Computed in Strongly Subquadratic Time (unless SETH is false). Forty-Seventh Annual ACM on Symposium on Theory of Computing (STOC). arXiv:1412.0348. Bibcode:2014arXiv1412.0348B.
+Black, Paul E., ed. (14 August 2008), "Levenshtein distance", Dictionary of Algorithms and Data Structures [online], U.S. National Institute of Standards and Technology, retrieved 2 November 2016
+Computational complexity
+Computing Levenshtein distance
+Computing the Levenshtein distance is based on the observation that if we reserve a matrix to hold the Levenshtein distances between all prefixes of the first string and all prefixes of the second, then we can compute the values in the matrix in a dynamic programming fashion, and thus find the distance between the two full strings as the last value computed.
+Contents
+Damerau–Levenshtein distance
+Definition
+Dynamic time warping
+Edit distance is usually defined as a parameterizable metric calculated with a specific set of allowed edit operations, and each operation is assigned a cost (possibly infinite). This is further generalized by DNA sequence alignment algorithms such as the Smith–Waterman algorithm, which make an operation's cost depend on where it is applied.
+Edit distance matrix for two words using cost of substitution as 1 and cost of deletion or insertion as 0.5.
+Euclidean distance
+Example
+External links
+For example, the Levenshtein distance between "kitten" and "sitting" is 3, since the following three edits change one into the other, and there is no way to do it with fewer than three edits:
+From Wikipedia, the free encyclopedia
+Hamming distance
+Hirschberg's algorithm combines this method with divide and conquer. It can compute the optimal edit sequence, and not just the edit distance, in the same asymptotic time and space bounds.[7]
+ Hirschberg, D. S. (1975). "A linear space algorithm for computing maximal common subsequences" (PDF). Communications of the ACM (Submitted manuscript). 18 (6): 341–343. CiteSeerX 10.1.1.348.4774. doi:10.1145/360825.360861. MR 0375829. S2CID 207694727.
+ Hjelmqvist, Sten (26 March 2012), Fast, memory efficient Levenshtein algorithm
+Homology of sequences in genetics
+Hunt–Szymanski algorithm
+If the strings are the same size, the Hamming distance is an upper bound on the Levenshtein distance. The Hamming distance is the number of positions at which the corresponding symbols in the two strings are different.
+In approximate string matching, the objective is to find matches for short strings in many longer texts, in situations where a small number of differences is to be expected. The short strings could come from a dictionary, for instance. Here, one of the strings is typically short, while the other is arbitrarily long. This has a wide range of applications, for instance, spell checkers, correction systems for optical character recognition, and software to assist natural language translation based on translation memory.
+In information theory, linguistics, and computer science, the Levenshtein distance is a string metric for measuring the difference between two sequences. Informally, the Levenshtein distance between two words is the minimum number of single-character edits (insertions, deletions or substitutions) required to change one word into the other. It is named after the Soviet mathematician Vladimir Levenshtein, who considered this distance in 1965.[1]
+In linguistics, the Levenshtein distance is used as a metric to quantify the linguistic distance, or how different two languages are from one another.[3] It is related to mutual intelligibility, the higher the linguistic distance, the lower the mutual intelligibility, and the lower the linguistic distance, the higher the mutual intelligibility.
+It has been shown that the Levenshtein distance of two strings of length n cannot be computed in time O(n2 − ε) for any ε greater than zero unless the strong exponential time hypothesis is false.[10]
+It is at least the difference of the sizes of the two strings.
+It is at most the length of the longer string.
+It is zero if and only if the strings are equal.
+It turns out that only two rows of the table are needed for the construction if one does not want to reconstruct the edited input strings (the previous row and the current row being calculated).
+Iterative with full matrix
+Iterative with two matrix rows
+Jaccard index
+ Jan D. ten Thije; Ludger Zeevaert (1 January 2007), Receptive multilingualism: linguistic analyses, language policies, and didactic concepts, John Benjamins Publishing Company, 2007, ISBN 978-90-272-1926-8, ... Assuming that intelligibility is inversely related to linguistic distance ... the content words the percentage of cognates (related directly or via a synonym) ... lexical relatedness ... grammatical relatedness ...
+Jump to navigationJump to search
+Levenshtein automata efficiently determine whether a string has an edit distance lower than a given constant from a given string.[8]
+Levenshtein distance
+Levenshtein distance may also be referred to as edit distance, although that term may also denote a larger family of distance metrics known collectively as edit distance.[2]:32 It is closely related to pairwise string alignments.
+Locality-sensitive hashing
+Longest common subsequence problem
+Lucene (an open source search engine that implements edit distance)
+Main article: Edit distance
+Main article: Wagner–Fischer algorithm
+Manhattan distance
+Metric space
+MinHash
+ Navarro, Gonzalo (2001). "A guided tour to approximate string matching" (PDF). ACM Computing Surveys. 33 (1): 31–88. CiteSeerX 10.1.1.452.6317. doi:10.1145/375360.375365. S2CID 207551224.
+Note that the first element in the minimum corresponds to deletion (from {\displaystyle a}a to {\displaystyle b}b), the second to insertion and the third to replacement.
+Note: This section uses 1-based strings instead of 0-based strings
+Numerical taxonomy
+Optimal matching algorithm
+Recursive
+References
+Relationship with other edit distance metrics
+S	1	0	1	2	3	4	5	6	7
+S	a	t	u	r	d	a	y
+ Schulz, Klaus U.; Mihov, Stoyan (2002). "Fast String Correction with Levenshtein-Automata". International Journal of Document Analysis and Recognition. 5 (1): 67–85. CiteSeerX 10.1.1.16.652. doi:10.1007/s10032-002-0082-8. S2CID 207046453.
+See also
+Sørensen similarity index
+The Levenshtein distance between two strings is no greater than the sum of their Levenshtein distances from a third string (triangle inequality).
+The Levenshtein distance between two strings of length n can be approximated to within a factor
+The Levenshtein distance between two strings {\displaystyle a,b}a,b (of length {\displaystyle |a|}|a| and {\displaystyle |b|}|b| respectively) is given by {\displaystyle \operatorname {lev} (a,b)}{\displaystyle \operatorname {lev} (a,b)} where
+The Levenshtein distance can also be computed between two longer strings, but the cost to compute it, which is roughly proportional to the product of the two string lengths, makes this impractical. Thus, when used to aid in fuzzy string searching in applications such as record linkage, the compared strings are usually short to help improve speed of comparisons.[citation needed]
+The Levenshtein distance has several simple upper and lower bounds. These include:
+The Levenshtein distance may be calculated iteratively using the following algorithm:[5]
+	The Wikibook Algorithm implementation has a page on the topic of: Levenshtein distance
+The dynamic variant is not the ideal implementation. An adaptive approach may reduce the amount of memory required and, in the best case, may reduce the time complexity to linear in the length of the shortest string, and, in the worst case, no more than quadratic in the length of the shortest string. The idea is that one can use efficient library functions (std::mismatch) to check for common prefixes and suffixes and only dive into the DP part on mismatch.[6]
+The invariant maintained throughout the algorithm is that we can transform the initial segment s[1..i] into t[1..j] using a minimum of d[i,j] operations. At the end, the bottom-right element of the array contains the answer.
+There are other popular measures of edit distance, which are calculated using a different set of allowable edit operations. For instance,
+This algorithm, an example of bottom-up dynamic programming, is discussed, with variants, in the 1974 article The String-to-string correction problem by Robert A. Wagner and Michael J. Fischer.[4]
+This definition corresponds directly to the naïve recursive implementation.
+This implementation is very inefficient because it recomputes the Levenshtein distance of the same substrings many times.
+This is a straightforward pseudocode implementation for a function LevenshteinDistance that takes two strings, s of length m, and t of length n, and returns the Levenshtein distance between them:
+This is a straightforward, but inefficient, recursive Haskell implementation of a lDistance function that takes two strings, s and t, together with their lengths, and returns the Levenshtein distance between them:
+This two row variant is suboptimal—the amount of memory required may be reduced to one row and one (index) word of overhead, for better cache locality.[6]
+Two examples of the resulting matrix (hovering over a tagged number reveals the operation performed to get that number):
+Upper and lower bounds
+ Wagner, Robert A.; Fischer, Michael J. (1974), "The String-to-String Correction Problem", Journal of the ACM, 21 (1): 168–173, doi:10.1145/321796.321811, S2CID 13381535
+      [ lDistance (a:s') t' -- Character is inserted (b inserted)
+      ]
+a	5	4	3	4	4	4	4	3	4
+    a == b
+agrep
+d	4	3	3	3	3	4	3	4	5
+      d[0, j] := j
+      d[i, 0] := i
+                             d[i, j-1] + 1,                   // insertion
+          d[i, j] := minimum(d[i-1, j] + 1,                   // deletion
+                             d[i-1, j-1] + substitutionCost)  // substitution
+  declare int d[0..m, 0..n]
+    declare int v0[n + 1]
+    declare int v1[n + 1]
+            deletionCost := v0[j + 1] + 1
+diff
+  else
+          else:
+            else:
+    for i from 0 to m-1:
+    for i from 0 to n:
+  for i from 1 to m:
+      for i from 1 to m:
+        for j from 0 to n-1:
+  for j from 1 to n:
+  for j from 1 to n:
+function LevenshteinDistance(char s[0..m-1], char t[0..n-1]):
+function LevenshteinDistance(char s[1..m], char t[1..n]):
+g	7	7	6	5	4	4	3
+i	2	2	1	2	3	4	5
+i	5	5	4	3	2	2	3
+  if
+          if s[i] = t[j]:
+            if s[i] = t[j]:
+            insertionCost := v1[j] + 1
+k	i	t	t	e	n
+kitten → sitten (substitution of "s" for "k")
+lDistance (a:s') (b:t') =
+lDistance :: ( Eq a ) => [a] -> [a] -> Int
+lDistance [] t = length t   -- If s is empty the distance is the number of characters in t
+lDistance s [] = length s   -- If t is empty the distance is the number of characters in s
+    lDistance s' t'         -- If the first characters are the same they can be ignored
+n	3	2	2	2	3	3	4	5	6
+n	6	6	5	4	3	3	2
+  return d[m, n]
+    return v0[n]
+s	1	1	2	3	4	5	6
+  set each element in d to zero
+sitten → sittin (substitution of "i" for "e")
+sittin → sitting (insertion of "g" at the end).
+            substitutionCost := 0
+            substitutionCost := 1
+                substitutionCost := v0[j]
+                substitutionCost := v0[j] + 1
+        swap v0 with v1
+t	3	3	2	1	2	3	4
+t	4	4	3	2	1	2	3
+the Damerau–Levenshtein distance allows the transposition of two adjacent characters alongside insertion, deletion, substitution;
+the Hamming distance allows only substitution, hence, it only applies to strings of the same length.
+the Jaro distance allows only transposition.
+the longest common subsequence (LCS) distance allows only insertion and deletion, not substitution;
+  then
+u	2	1	1	2	2	3	4	5	6
+        v0[i] = i
+        v1[0] = i + 1
+            v1[j + 1] := minimum(deletionCost, insertionCost, substitutionCost)
+where the {\displaystyle \operatorname {tail} }{\displaystyle \operatorname {tail} } of some string {\displaystyle x}x is a string of all but the first character of {\displaystyle x}x, and {\displaystyle x[n]}x[n] is the {\displaystyle n}nth character of the string {\displaystyle x}x, starting with character 0.
+where ε > 0 is a free parameter to be tuned, in time O(n1 + ε).[9]
+y	6	5	4	4	5	5	5	4	3
+{\displaystyle (\log n)^{O(1/\varepsilon )}}{\displaystyle (\log n)^{O(1/\varepsilon )}}
+{\displaystyle \qquad \operatorname {lev} (a,b)={\begin{cases}|a|&{\text{ if }}|b|=0,\\|b|&{\text{ if }}|a|=0,\\\operatorname {lev} (\operatorname {tail} (a),\operatorname {tail} (b))&{\text{ if }}a[0]=b[0]\\1+\min {\begin{cases}\operatorname {lev} (\operatorname {tail} (a),b)\\\operatorname {lev} (a,\operatorname {tail} (b))\\\operatorname {lev} (\operatorname {tail} (a),\operatorname {tail} (b))\\\end{cases}}&{\text{ otherwise.}}\end{cases}}}{\displaystyle \qquad \operatorname {lev} (a,b)={\begin{cases}|a|&{\text{ if }}|b|=0,\\|b|&{\text{ if }}|a|=0,\\\operatorname {lev} (\operatorname {tail} (a),\operatorname {tail} (b))&{\text{ if }}a[0]=b[0]\\1+\min {\begin{cases}\operatorname {lev} (\operatorname {tail} (a),b)\\\operatorname {lev} (a,\operatorname {tail} (b))\\\operatorname {lev} (\operatorname {tail} (a),\operatorname {tail} (b))\\\end{cases}}&{\text{ otherwise.}}\end{cases}}}
+ В. И. Левенштейн (1965). Двоичные коды с исправлением выпадений, вставок и замещений символов [Binary codes capable of correcting deletions, insertions, and reversals]. Доклады Академии Наук СССР (in Russian). 163 (4): 845–848. Appeared in English as: Levenshtein, Vladimir I. (February 1966). "Binary codes capable of correcting deletions, insertions, and reversals". Soviet Physics Doklady. 10 (8): 707–710. Bibcode:1966SPhD...10..707L.

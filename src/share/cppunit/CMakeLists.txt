@@ -1,0 +1,23 @@
+set(CURRENT_PROJECT_DIR_NAME cppunit)    #need set
+message("CURRENT_PROJECT_DIR_NAME=${CURRENT_PROJECT_DIR_NAME}")
+
+project(${CURRENT_PROJECT_DIR_NAME})
+
+
+#wget https://udomain.dl.sourceforge.net/project/cppunit/cppunit/1.12.1/cppunit-1.12.1.tar.gz
+set(CURRENT_TAR_FILE ${CMAKE_SOURCE_DIR}/share/${CURRENT_PROJECT_DIR_NAME}/cppunit-1.12.1.tar.gz)  #need set
+message("CURRENT_TAR_FILE=${CURRENT_TAR_FILE}")
+
+set(CURRENT_AFTER_UNTAR_DIR_PATH ${CMAKE_BINARY_DIR}/share/${CURRENT_PROJECT_DIR_NAME}/cppunit-1.12.1)  #need set
+message("CURRENT_AFTER_UNTAR_DIR_PATH =${CURRENT_AFTER_UNTAR_DIR_PATH}")
+
+set(CURRENT_BUILD_DIR ${CURRENT_AFTER_UNTAR_DIR_PATH})   #need set
+message("CURRENT_BUILD_DIR=${CURRENT_BUILD_DIR}")
+
+execute_process( COMMAND rm -rf  ${CURRENT_AFTER_UNTAR_DIR_PATH} )
+execute_process( COMMAND rm -rf  ${CURRENT_BUILD_DIR} )
+execute_process( COMMAND tar zxf ${CURRENT_TAR_FILE}  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/share/${CURRENT_PROJECT_DIR_NAME})
+
+execute_process( COMMAND bash ./configure  --prefix=${${TOP_PROJECT_NAME_UPPER}_DEPEND_PREFIX_DIR} CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1  WORKING_DIRECTORY ${CURRENT_BUILD_DIR} )
+execute_process( COMMAND make WORKING_DIRECTORY ${CURRENT_BUILD_DIR} )
+execute_process( COMMAND make install WORKING_DIRECTORY ${CURRENT_BUILD_DIR})
