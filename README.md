@@ -104,32 +104,7 @@ Please contact dingbinthu@163.com for related questions and other matters not co
 
 
 
-About this project use to log in to print component tulip - log can be found in the author's open source release of another project: https://github.com/apollo008/tulip-log. One of the basic premises involved in using the project's command-line tools, **ofst** and **lfsort**, is the need to configure a definition file for the tuliop log in the current directory. It is commonly named logger.conf. Also included in this project is the rich C++ use of unit testing CppUnit module to ensure the quality of the code function. Here is a configuration file for Tulip Log: logger.conf  
-
-```
-#Tulip log配置文件
-
-tlog.rootLogger=INFO, tulipAppender,consoleAppender
-tlog.appender.tulipAppender=FileAppender
-tlog.appender.tulipAppender.max_file_size=3024
-tlog.appender.tulipAppender.fileName=logs/app.log
-tlog.appender.tulipAppender.flush=false
-tlog.appender.tulipAppender.delay_time=1
-tlog.appender.tulipAppender.layout=PatternLayout
-tlog.appender.tulipAppender.layout.LogPattern=[%%d] [%%t,%%F:%%n -- %%f() %%l] [%%m]
-
-tlog.appender.consoleAppender=ConsoleAppender
-tlog.appender.consoleAppender.delay_time=1
-tlog.appender.consoleAppender.layout=PatternLayout
-tlog.appender.consoleAppender.layout.LogPattern=[%%d] [%%t,%%F:%%n -- %%f() %%l] [%%m]
-
-tlog.appender.udpAppender=UdpAppender
-tlog.appender.udpAppender.ip=192.168.0.211
-tlog.appender.udpAppender.port=14878
-tlog.appender.udpAppender.layout=PatternLayout
-tlog.appender.udpAppender.layout.LogPattern=[%%d] [%%t,%%F:%%n -- %%f() %%l] [%%m]
-####################################################################
-```
+About this project use to log in to print component tulip - log can be found in the author's open source release of another project: https://github.com/apollo008/tulip-log. One of the basic premises involved in using the project's command-line tools, **ofst** and **lfsort**, is the need to configure a definition file for the tuliop log in the current directory. It is commonly named logger.conf. Also included in this project is the rich C++ use of unit testing CppUnit module to ensure the quality of the code function. misc/config/logger.conf is a configuration file example for Tulip Log: logger.conf.  
 
 Levenshtein automata and Damerau Levenshtein automata implementation process details are actually quite complex, on this topic is not the focus of this project, although this project completely contains Levenshtein automata implementation of all the source code. On the topic of using Levenshtein or Damerau Levenshtein automata to quickly query similar strings in search engines, readers who are interested can read another article by the author:<搜索引擎中相似字符串查找那些事儿> https://mp.weixin.qq.com/s/0ODgrWSVdRnYZxGRGmEdsA.
 
