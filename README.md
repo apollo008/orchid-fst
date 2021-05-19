@@ -4,7 +4,7 @@
 
 ## 1.  Project Overview
 
-This project Orchid-Fst  implements a fast text string dictionary search data structure:  Finite state transducer , which is short for FST in  C++ language. Orchid-FST requires C++11 support and currently supports compilation and running on UNIX-like systems.  
+This project Orchid-Fst  implements a fast text string dictionary search data structure:  Finite state transducer , which is short for FST in  C++ language. Orchid-FST requires C++11 support (It is best to compile with GCC 7 or higher) and currently supports compilation and running on UNIX-like systems.  
 
 Fst data structure has been widely used in open source search engine: Elasticsearch and Lucene core source. It is so fast for search text string, it can be understand as a key-value map or set data structure. The query time complexity on the FST data structure is O(n), where n is the length of the actual text string with the query, independent of the size of the massive text data set. This is a very important and huge advantage. 
 
