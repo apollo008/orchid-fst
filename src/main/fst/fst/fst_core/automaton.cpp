@@ -120,7 +120,8 @@ AutomatonStatePtr GreaterThanAutomaton::Accept(const AutomatonStatePtr & state,
             else if (s < m_utf8strs[st->m_matchedLength]) {
                 return nullptr;
             }
-            else if (s == m_utf8strs[st->m_matchedLength]) {
+            else {
+                assert(s == m_utf8strs[st->m_matchedLength]);
                 return std::make_shared<GreaterThanAutomatonState>(st->m_matchedLength+1, true);
             }
         }
@@ -171,7 +172,8 @@ AutomatonStatePtr LessThanAutomaton::Accept(const AutomatonStatePtr & state,
             else if (s < m_utf8strs[st->m_matchedLength]) {
                 return std::make_shared<LessThanAutomatonState>(st->m_matchedLength, false);
             }
-            else if (s == m_utf8strs[st->m_matchedLength]) {
+            else {
+                assert(s == m_utf8strs[st->m_matchedLength]);
                 return std::make_shared<LessThanAutomatonState>(st->m_matchedLength+1, true);
             }
         }
@@ -242,14 +244,18 @@ AutomatonStatePtr LevenshteinAutomaton::Accept(const AutomatonStatePtr &ptr, con
 
     LevenshteinAutomatonStatePtr st = dynamic_pointer_cast<LevenshteinAutomatonState>(ptr);
     StateCacheMapType::iterator it1 = m_statesCacheMap.find(st);
-    if (it1 == m_statesCacheMap.end()) return nullptr;
-
-    if (m_bStrOccursMap.find(s) == m_bStrOccursMap.end()) {
-        s.clear();
+    if (it1 == m_statesCacheMap.end()) {
+        return nullptr;
     }
+
     auto it2 = it1->second->find(s);
-    if (it2 == it1->second->end()) return nullptr;
-    return it2->second;
+    if (it2 != it1->second->end()) {
+        return it2->second;
+    }
+    else {
+        it2 = it1->second->find("");
+        return it2 == it1->second->end() ? nullptr : it2->second;
+    }
 }
 
 void LevenshteinAutomaton::buildDfa() {
@@ -273,14 +279,13 @@ void LevenshteinAutomaton::buildDfa() {
 
         vector<size_t> newState;
         for (size_t ix = 0; ix < m_utf8strs.size(); ++ix) {
+            if (lastState->m_curEdits[ix] > m_editDistance) continue;
 
             if (transStrSet.find(m_utf8strs[ix]) != transStrSet.end()) continue;
             transStrSet.insert(m_utf8strs[ix]);
 
-            if (lastState->m_curEdits[ix] > m_editDistance) continue;
-
             newState.clear();
-            newState.push_back(lastState->m_curEdits[0] + 1);
+            newState.push_back(std::min(lastState->m_curEdits[0] + 1,(size_t)m_editDistance + 1));
             for (size_t k = 1; k <= m_utf8strs.size(); ++k) {
                 size_t cost = ((m_utf8strs[ix] == m_utf8strs[k-1]) ? 0 : 1);
                 size_t distance = std::min(std::min(lastState->m_curEdits[k-1] + cost, lastState->m_curEdits[k] + 1),newState[k-1] + 1);
@@ -298,7 +303,7 @@ void LevenshteinAutomaton::buildDfa() {
         do {
             //consider special char not in 'm_str', use special empty string for this case
             newState.clear();
-            newState.push_back(lastState->m_curEdits[0] + 1);
+            newState.push_back(std::min(lastState->m_curEdits[0] + 1,(size_t)m_editDistance+1));
             size_t cost = 1;
             for (size_t k = 1; k <= m_utf8strs.size(); ++k) {
                 size_t distance = std::min(std::min(lastState->m_curEdits[k-1] + cost, lastState->m_curEdits[k] + 1),newState[k-1] + 1);
