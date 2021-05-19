@@ -24,9 +24,11 @@ COMMON_BEGIN_NAMESPACE
 class FstTest: public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(FstTest);
     CPPUNIT_TEST(testFst);
+    CPPUNIT_TEST(testFstFuzzy);
     CPPUNIT_TEST_SUITE_END();
 public:
     void testFst();
+    void testFstFuzzy();
 private:
     TLOG_DECLARE();
 };
