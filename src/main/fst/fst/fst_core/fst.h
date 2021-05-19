@@ -479,6 +479,8 @@ public:
     ///draw fst in dot file format
     void DotDraw( std::ostream& os);
 
+    ///whether is a map or set
+    bool HasOutput() { return m_hasOutput; }
 private:
     ///recursively draw fst node in dot file format
     void DotDrawRecur(FstReaderNodePtr node,uint32_t& idx,vector<pair<uint8_t,string> >& inputs,std::unordered_map<uint64_t,std::pair<uint32_t,bool> >& offset2idxMap, std::ostream& os);

@@ -295,7 +295,7 @@ void LevenshteinAutomaton::buildDfa() {
                 statesStack.push(newStPtr);
             }
         }
-        {
+        do {
             //consider special char not in 'm_str', use special empty string for this case
             newState.clear();
             newState.push_back(lastState->m_curEdits[0] + 1);
@@ -305,14 +305,15 @@ void LevenshteinAutomaton::buildDfa() {
                 newState.push_back(std::min(distance,(size_t)m_editDistance+1));
             }
             LevenshteinAutomatonStatePtr newStPtr = std::make_shared<LevenshteinAutomatonState>(newState);
-            if (!CanMatch(newStPtr)) continue;
+            if (!CanMatch(newStPtr)) break;
 
             trans2StateMap->insert(std::make_pair(string(),newStPtr));
 
             if (newStPtr != lastState && m_statesCacheMap.find(newStPtr) == m_statesCacheMap.end()) {
                 statesStack.push(newStPtr);
             }
-        }
+        } while (false);
+
         if (!trans2StateMap->empty()) {
             m_statesCacheMap.insert(std::make_pair(lastState,trans2StateMap));
         }

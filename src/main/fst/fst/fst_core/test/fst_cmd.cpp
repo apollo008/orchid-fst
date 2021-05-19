@@ -227,7 +227,13 @@ int main(int argc, char** argv) {
             return 1;
         }
         else {
-            TLOG_LOG(INFO,"Found result:[%s]->[%lu], time consumed:[%lu] us.", item->GetInputStr().c_str(),item->m_output, edTime-stTime);
+            bool isMap = fstReader.HasOutput();
+            if (isMap) {
+                TLOG_LOG(INFO,"Found result:[%s]->[%lu], time consumed:[%lu] us.", item->GetInputStr().c_str(),item->m_output, edTime-stTime);
+            }
+            else {
+                TLOG_LOG(INFO,"Found result:[%s], time consumed:[%lu] us.", item->GetInputStr().c_str(),edTime-stTime);
+            }
         }
     }
     else if (prefixQuerySubCmd->parsed()) {
@@ -275,10 +281,16 @@ int main(int argc, char** argv) {
         FstReader::Iterator it = fstReader.GetPrefixIterator(leftBound, rightBound,prefixstr);
 
         uint64_t  hitCount = 0;
+        bool isMap = fstReader.HasOutput();
         while (true) {
             FstReader::IteratorResultPtr item = it.Next();
             if (nullptr == item) break;
-            TLOG_LOG(INFO,"[%s]->[%lu]", item->GetInputStr().c_str(),item->m_output);
+            if (isMap) {
+                TLOG_LOG(INFO,"[%s]->[%lu]", item->GetInputStr().c_str(),item->m_output);
+            }
+            else {
+                TLOG_LOG(INFO,"[%s]", item->GetInputStr().c_str());
+            }
             ++hitCount;
         }
         int64_t  edTime = TimeUtility::CurrentTimeInMicroSeconds();
@@ -330,10 +342,16 @@ int main(int argc, char** argv) {
         FstReader::Iterator it = fstReader.GetRangeIterator(leftBound,rightBound);
 
         uint64_t hitCount = 0;
+        bool isMap = fstReader.HasOutput();
         while (true) {
             FstReader::IteratorResultPtr item = it.Next();
             if (nullptr == item) break;
-            TLOG_LOG(INFO, "[%s]->[%lu]", item->GetInputStr().c_str(), item->m_output);
+            if (isMap){
+                TLOG_LOG(INFO, "[%s]->[%lu]", item->GetInputStr().c_str(), item->m_output);
+            }
+            else {
+                TLOG_LOG(INFO, "[%s]", item->GetInputStr().c_str());
+            }
             ++hitCount;
         }
         int64_t edTime = TimeUtility::CurrentTimeInMicroSeconds();
@@ -349,10 +367,16 @@ int main(int argc, char** argv) {
         FstReader::Iterator it = fstReader.GetFuzzyIterator(fuzzyStr,editDistance,fuzzyPrefixLen);
 
         uint64_t hitCount = 0;
+        bool isMap = fstReader.HasOutput();
         while (true) {
             FstReader::IteratorResultPtr item = it.Next();
             if (nullptr == item) break;
-            TLOG_LOG(INFO, "[%s]->[%lu]", item->GetInputStr().c_str(), item->m_output);
+            if (isMap) {
+                TLOG_LOG(INFO, "[%s]->[%lu]", item->GetInputStr().c_str(), item->m_output);
+            }
+            else {
+                TLOG_LOG(INFO, "[%s]", item->GetInputStr().c_str());
+            }
             ++hitCount;
         }
         int64_t edTime = TimeUtility::CurrentTimeInMicroSeconds();
