@@ -72,7 +72,7 @@ Subcommands:
   match                                 execute accurate match query for a term text in the fst.
   prefix                                execute prefix query starts with a term text in the fst.
   range                                 execute range query in the fst.
-  fuzzy                                 execute fuzzy query in the fst,it works by building a Levenshtein automaton within a edit distance.
+  fuzzy                                 execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance.
 
 Please contact dingbinthu@163.com for related questions and other matters not covered. Enjoy it!
 
