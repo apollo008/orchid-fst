@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
     uint32_t editDistance, fuzzyPrefixLen;
     uint64_t maxCacheSize;
     bool isFileSorted;
+    bool isUseDamerauLevenshtein;
     string workDir;
     uint32_t threadNum,splitFileNum, parallelTaskNum;
     if (mapSubCmd) {
@@ -104,6 +105,9 @@ int main(int argc, char** argv) {
         fuzzyQuerySubCmd->add_option("-z,--fuzzy-str",fuzzyStr,"string to be fuzzy matched.")->required(true);
         fuzzyQuerySubCmd->add_option("-d,--distance",editDistance,"edit distance for levenshtein similarity search used.")->check(CLI::Range(0,100))->required(true);
         fuzzyQuerySubCmd->add_option("-l,--prefix-len",fuzzyPrefixLen,"same prefix length ignored for levenshtein similarity search used.")->default_val(0);
+        fuzzyQuerySubCmd->add_flag("-m,--damerau-levenshtein",
+                                   isUseDamerauLevenshtein,
+                                   "Set this if use Damerau-Levenshtein Distance to measure similarity. Levenshtein Distance will be used to measure similarity if not set this option.")->default_val(false)->required(false);
     }
 
     CLI11_PARSE(app, argc, argv);
@@ -364,7 +368,7 @@ int main(int argc, char** argv) {
         FstReader fstReader(mMapDataPiece.GetData());
 
         int64_t  stTime = TimeUtility::CurrentTimeInMicroSeconds();
-        FstReader::Iterator it = fstReader.GetFuzzyIterator(fuzzyStr,editDistance,fuzzyPrefixLen);
+        FstReader::Iterator it = fstReader.GetFuzzyIterator(fuzzyStr,editDistance,fuzzyPrefixLen,isUseDamerauLevenshtein);
 
         uint64_t hitCount = 0;
         bool isMap = fstReader.HasOutput();

@@ -76,7 +76,7 @@ void FstTest::testFstFuzzy() {
     bool openOk = mMapDataPiece.OpenRead(fstOutputFile.c_str(), true);
     assert(openOk);
     FstReader fstReader(mMapDataPiece.GetData());
-    FstReader::Iterator it = fstReader.GetFuzzyIterator("hair",2,0);
+    FstReader::Iterator it = fstReader.GetFuzzyIterator("hair",2,0,false);
     uint64_t hitCount = 0;
     isMap = fstReader.HasOutput();
     CPPUNIT_ASSERT_EQUAL(false,isMap);

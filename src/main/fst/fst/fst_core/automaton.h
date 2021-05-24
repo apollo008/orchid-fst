@@ -32,6 +32,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <cassert>
+#include <unordered_set>
 
 STD_USE_NAMESPACE;
 COMMON_BEGIN_NAMESPACE
@@ -516,6 +517,106 @@ protected:
     StateCacheMapType                  m_statesCacheMap;
 };
 TYPEDEF_PTR(LevenshteinAutomaton);
+
+
+
+//damerau levenshtein automaton state
+class DamerauLevenshteinAutomatonState : public AutomatonState {
+public:
+    typedef vector<size_t>                             DISTANCE_SEQUENCE;
+    typedef std::shared_ptr<DISTANCE_SEQUENCE >        DISTANCE_SEQUENCE_PTR;
+    typedef std::shared_ptr<vector<string> >           UTF8_QUERY_STRS_PTR;
+public:
+    DamerauLevenshteinAutomatonState(DISTANCE_SEQUENCE_PTR curEdits,
+                                     DISTANCE_SEQUENCE_PTR prevEdits,
+                                     const string&         prevStr,
+                                     bool                  isPrevStrInQueryStr,
+                                     UTF8_QUERY_STRS_PTR   utf8QueryStrs,
+                                     uint32_t              editDistance );
+    bool IsPossibleTransposition();
+    void GetPossibleTranspositionStrs( unordered_set<string>& resultStrs);
+public:
+    static bool IsDistanceSequencesEqual(const DISTANCE_SEQUENCE& seq1, const DISTANCE_SEQUENCE& seq2);
+public:
+    DISTANCE_SEQUENCE_PTR     curEdits_;
+    DISTANCE_SEQUENCE_PTR     prevEdits_;
+    string                    prevStr_;
+    bool                      isPrevStrInQueryStr_;
+    UTF8_QUERY_STRS_PTR       utf8QueryStrs_;
+    uint32_t                  editDistance_;
+};
+TYPEDEF_PTR(DamerauLevenshteinAutomatonState);
+
+class DamerauLevenshteinAutomatonStateHash {
+public:
+    size_t operator()(const DamerauLevenshteinAutomatonStatePtr& key) const {
+        uint64_t seed = 0;
+        for (size_t st : *(key->curEdits_)) {
+            HashCombine(seed,st);
+        }
+        return seed;
+    }
+};
+
+class DamerauLevenshteinAutomatonStateEqual {
+public:
+    bool operator()(const DamerauLevenshteinAutomatonStatePtr & key1,
+                    const DamerauLevenshteinAutomatonStatePtr & key2) const {
+        if (!DamerauLevenshteinAutomatonState::IsDistanceSequencesEqual(
+                *(key1->curEdits_), *(key2->curEdits_) ))  return false;
+        if (key1->isPrevStrInQueryStr_ != key2->isPrevStrInQueryStr_) return false;
+        if (key1->isPrevStrInQueryStr_ == false) {
+            return true;
+        }
+        if (key1->prevStr_ != key2->prevStr_) return false;
+        if (key1->IsPossibleTransposition() || key2->IsPossibleTransposition()) {
+            return DamerauLevenshteinAutomatonState::IsDistanceSequencesEqual(
+                    key1->prevEdits_ ?( *(key1->prevEdits_) ) : DamerauLevenshteinAutomatonState::DISTANCE_SEQUENCE(),
+                    key2->prevEdits_ ?( *(key2->prevEdits_) ) : DamerauLevenshteinAutomatonState::DISTANCE_SEQUENCE() );
+        }
+        return true;
+    }
+};
+
+
+
+//Damerau levenshtein automaton  which indicates Damerau Levenshtein edit distance
+class DamerauLevenshteinAutomaton : public Automaton {
+public:
+    //NOTE THAT use empty string to indicates the trans which not in 'm_str'
+    typedef unordered_map<DamerauLevenshteinAutomatonStatePtr,
+            std::shared_ptr<unordered_map<string, DamerauLevenshteinAutomatonStatePtr> >,
+            DamerauLevenshteinAutomatonStateHash,DamerauLevenshteinAutomatonStateEqual>  StateCacheMapType;
+public:
+    DamerauLevenshteinAutomaton(const string& str, uint32_t editDistance)
+    : m_str(str)
+    , m_editDistance (editDistance)
+    , m_utf8strs(std::make_shared<vector<string> >())
+    {
+        Utf8Util::String2utf8(m_str,*m_utf8strs);
+        for (string s: *m_utf8strs) {
+            m_bStrOccursMap[s] = true;
+        }
+        buildDfa();
+    }
+
+private:
+    void buildDfa();
+public:
+    AutomatonStatePtr Start() override;
+    bool IsMatch(const AutomatonStatePtr &state) override;
+    bool CanMatch(const AutomatonStatePtr &state) override;
+    AutomatonStatePtr Accept(const AutomatonStatePtr &ptr, const vector<uint8_t>& byteVec) override;
+
+protected:
+    string                             m_str;
+    uint32_t                           m_editDistance;
+    std::shared_ptr<vector<string> >   m_utf8strs;
+    unordered_map<string, bool>        m_bStrOccursMap;
+    StateCacheMapType                  m_statesCacheMap;
+};
+TYPEDEF_PTR(DamerauLevenshteinAutomaton);
+
 
 
 

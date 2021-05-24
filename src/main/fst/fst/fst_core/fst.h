@@ -473,8 +473,9 @@ public:
     ///prefix query implements prefix automaton match
     Iterator GetPrefixIterator(const FstIterBound& min,const FstIterBound& max,string prefixstr);
 
-    ///fuzzy query implements levenshtein automaton match
-    Iterator GetFuzzyIterator(string str, uint32_t editDistance, uint32_t samePrefixLen);
+    ///fuzzy query implements levenshtein automaton match when 'isUseDamerauLevenshtein' is false
+    /// or Damerau-Levenshtein automaton match when 'isUseDamerauLevenshtein' is true
+    Iterator GetFuzzyIterator(string str, uint32_t editDistance, uint32_t samePrefixLen, bool isUseDamerauLevenshtein);
 
     ///draw fst in dot file format
     void DotDraw( std::ostream& os);

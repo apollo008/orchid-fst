@@ -528,14 +528,16 @@ FstReader::Iterator FstReader::GetIterator(const FstIterBound& min,const FstIter
     return FstReader::Iterator(m_pData,*(uint64_t*)m_pData, min,max,aut);
 }
 
-FstReader::Iterator FstReader::GetFuzzyIterator(string str, uint32_t editDistance, uint32_t samePrefixLen) {
+FstReader::Iterator FstReader::GetFuzzyIterator(string str, uint32_t editDistance, uint32_t samePrefixLen, bool isUseDamerauLevenshtein) {
     vector<string> utf8strs;
     Utf8Util::String2utf8(str,utf8strs);
     if (samePrefixLen > utf8strs.size()) {
         samePrefixLen = utf8strs.size();
     }
     if (samePrefixLen==0) {
-        return GetIterator(FstIterBound(),FstIterBound(),std::make_shared<LevenshteinAutomaton>(str,editDistance));
+        return isUseDamerauLevenshtein ?
+          GetIterator(FstIterBound(),FstIterBound(),std::make_shared<DamerauLevenshteinAutomaton>(str,editDistance))
+        : GetIterator(FstIterBound(),FstIterBound(),std::make_shared<LevenshteinAutomaton>(str,editDistance));
     }
     else {
         string prefix;
@@ -543,7 +545,9 @@ FstReader::Iterator FstReader::GetFuzzyIterator(string str, uint32_t editDistanc
             prefix += utf8strs[i];
         }
         AutomatonPtr prefixAut = std::make_shared<PrefixAutomaton>(prefix);
-        AutomatonPtr levAut = std::make_shared<LevenshteinAutomaton>(str,editDistance);
+        AutomatonPtr levAut = ( isUseDamerauLevenshtein ?
+        (AutomatonPtr)std::make_shared<DamerauLevenshteinAutomaton>(str,editDistance)
+        : (AutomatonPtr)std::make_shared<LevenshteinAutomaton>(str,editDistance) );
         AutomatonPtr aut = Intersect(prefixAut,levAut);
         return GetIterator(FstIterBound(),FstIterBound(),aut);
     }
