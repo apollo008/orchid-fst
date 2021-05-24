@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     auto matchQuerySubCmd = app.add_subcommand("match", "execute accurate match query for a term text in the fst.");
     auto prefixQuerySubCmd = app.add_subcommand("prefix", "execute prefix query starts with a term text in the fst.");
     auto rangeQuerySubCmd = app.add_subcommand("range", "execute range query in the fst.");
-    auto fuzzyQuerySubCmd = app.add_subcommand("fuzzy", "execute fuzzy query in the fst,it works by building a Levenshtein automaton within a edit distance.");
+    auto fuzzyQuerySubCmd = app.add_subcommand("fuzzy", "execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance.");
 
     string dictFile, fstFile, dotFile, matchstr,prefixstr, gt,ge,lt,le,  fuzzyStr;
     uint32_t editDistance, fuzzyPrefixLen;
