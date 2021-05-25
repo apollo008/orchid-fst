@@ -121,6 +121,8 @@ This project Orchid-Fst currently supports compilation and installation in a UNI
 
 Before compiling and installing the Orchid-Fst project, you should first install the above two dependent libraries, one self-research log library Tulip-Log, one unit test library CppUnit, which are in the share directory and can be compiled in advance.  
 
+> Note: In Ubuntu Linux, You may should install zlib by command: 'sudo apt install zlib1g-dev' before install this project. Both in Ubuntu and Centos Linux, you'd better use gcc7/g++7 version or above.
+
 
 ```
 git clone https://github.com/apollo008/orchid-fst.git orchid-fst.git
