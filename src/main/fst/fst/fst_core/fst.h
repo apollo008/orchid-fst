@@ -214,8 +214,7 @@ public:
 
         uint64_t addrOffset = m_outputStream->GetTotalBytesCnt();
         s_FinalTerminateNode->Dump(m_outputStream,m_hasOutput);
-        bool ret = m_node2AddrOffsetMap.Put(s_FinalTerminateNode,addrOffset);
-        assert(ret);
+        m_node2AddrOffsetMap.Put(s_FinalTerminateNode,addrOffset);
     }
     ~FstBuilder() {}
 public:

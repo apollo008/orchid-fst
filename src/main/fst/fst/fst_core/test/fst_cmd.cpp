@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     if (mapSubCmd) {
         mapSubCmd->add_option("-f,--dict-file",dictFile,"dictionary file which with format like:`key,value` for every line.")->check(CLI::ExistingFile)->required(true);
         mapSubCmd->add_option("-o,--fst-file",fstFile,"output fst data file will be generated.")->check(CLI::NonexistentPath)->required(true);
-        mapSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::PositiveNumber)->required(false);
+        mapSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
 
         mapSubCmd->add_flag("-s,--sorted",isFileSorted,"Set this if the input data is already lexicographically sorted. This will make fst construction much faster.")->default_val(false)->required(false);
         mapSubCmd->add_option("-w,--work-directory",workDir,"work directory specified for sort input dictionary file if necessary,default /tmp if not set")->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     if (setSubCmd) {
         setSubCmd->add_option("-f,--dict-file",dictFile,"dictionary file which with format like:`key,value` for every line.")->check(CLI::ExistingFile)->required(true);
         setSubCmd->add_option("-o,--fst-file",fstFile,"output fst data file will be generated.")->check(CLI::NonexistentPath)->required(true);
-        setSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::PositiveNumber)->required(false);
+        setSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
 
         setSubCmd->add_flag("-s,--sorted",isFileSorted,"Set this if the input data is already lexicographically sorted. This will make fst construction much faster.")->default_val(false)->required(false);
         setSubCmd->add_option("-w,--work-directory",workDir,"work directory specified for sort input dictionary file if necessary,default /tmp if not set")->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);

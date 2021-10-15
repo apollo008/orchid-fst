@@ -109,8 +109,7 @@ uint64_t FstBuilder::FreezeNode(FstWriteNodePtr node) {
         return addr;
     }
     uint64_t addrOffset = m_outputStream->GetTotalBytesCnt();
-    bool ret = m_node2AddrOffsetMap.Put(node,addrOffset);
-    assert(ret);
+    m_node2AddrOffsetMap.Put(node,addrOffset);
     node->Dump(m_outputStream,m_hasOutput);
     return addrOffset;
 }
