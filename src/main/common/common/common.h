@@ -66,6 +66,29 @@ public:
     }
 };
 
+inline string fs(const string& str, size_t column_width=60) {
+    assert(column_width > 0);
+    ostringstream  oss;
+    size_t cur_count = 0;
+    for (size_t i = 0; i < str.size(); ++i) {
+        char c = str[i];
+        oss << c;
+        ++cur_count;
+        if (cur_count >= column_width && !isalnum(c)) {
+            oss << "\n";
+            cur_count = 0;
+            while (i+1 < str.size() && isblank(str[i+1])) {
+                ++i;
+            }
+        }
+    }
+    if (cur_count > 0) {
+        cur_count = 0;
+        oss << "\n";
+    }
+    return oss.str();
+}
+
 
 COMMON_END_NAMESPACE
 

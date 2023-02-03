@@ -30,18 +30,18 @@ int main(int argc, char** argv) {
     Random<uint32_t>::seedDefault();
 
 
-    CLI::App app("ofst: Orchid-Fst is a smart Fst command line tool", "ofst"); // 软件描述出现在第一行打印
-    app.footer("Please contact dingbinthu@163.com for related questions and other matters not covered. Enjoy it!"); // 最后一行打印
-    app.get_formatter()->column_width(40); // 列的宽度
+    CLI::App app(fs("ofst: Orchid-Fst is a smart Fst command line tool",95), "ofst"); // 软件描述出现在第一行打印
+    app.footer(fs("Please contact dingbinthu@163.com for related questions and other matters not covered. Enjoy it!",95)); // 最后一行打印
+    app.get_formatter()->column_width(35); // 列的宽度
     app.require_subcommand(1); // 表示运行命令需要且仅需要一个子命令
 
-    auto mapSubCmd = app.add_subcommand("map", "construct fst data file from a key-value(separated with comma every line) dictionary file.");
-    auto setSubCmd = app.add_subcommand("set", "construct fst data file from a only key(no value) dictionary file.");
-    auto dotSubCmd = app.add_subcommand("dot", "generate dot file from fst data file, which can be converted to png file using dot command like: dot -Tpng < a.dot > a.png, then you can view the picture generated.");
-    auto matchQuerySubCmd = app.add_subcommand("match", "execute accurate match query for a term text in the fst.");
-    auto prefixQuerySubCmd = app.add_subcommand("prefix", "execute prefix query starts with a term text in the fst.");
-    auto rangeQuerySubCmd = app.add_subcommand("range", "execute range query in the fst.");
-    auto fuzzyQuerySubCmd = app.add_subcommand("fuzzy", "execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance.");
+    auto mapSubCmd = app.add_subcommand("map", fs("construct fst data file from a key-value(separated with comma every line) dictionary file."));
+    auto setSubCmd = app.add_subcommand("set", fs("construct fst data file from a only key(no value) dictionary file."));
+    auto dotSubCmd = app.add_subcommand("dot", fs("generate dot file from fst data file, which can be converted to png file using dot command like: dot -Tpng < a.dot > a.png, then you can view the picture generated."));
+    auto matchQuerySubCmd = app.add_subcommand("match", fs("execute accurate match query for a term text in the fst."));
+    auto prefixQuerySubCmd = app.add_subcommand("prefix", fs("execute prefix query starts with a term text in the fst."));
+    auto rangeQuerySubCmd = app.add_subcommand("range", fs("execute range query in the fst."));
+    auto fuzzyQuerySubCmd = app.add_subcommand("fuzzy", fs("execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance."));
 
     string dictFile, fstFile, dotFile, matchstr,prefixstr, gt,ge,lt,le,  fuzzyStr;
     uint32_t editDistance, fuzzyPrefixLen;
@@ -51,63 +51,63 @@ int main(int argc, char** argv) {
     string workDir;
     uint32_t threadNum,splitFileNum, parallelTaskNum;
     if (mapSubCmd) {
-        mapSubCmd->add_option("-f,--dict-file",dictFile,"dictionary file which with format like:`key,value` for every line.")->check(CLI::ExistingFile)->required(true);
-        mapSubCmd->add_option("-o,--fst-file",fstFile,"output fst data file will be generated.")->check(CLI::NonexistentPath)->required(true);
-        mapSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
+        mapSubCmd->add_option("-f,--dict-file",dictFile,fs("dictionary file which with format like:`key,value` for every line."))->check(CLI::ExistingFile)->required(true);
+        mapSubCmd->add_option("-o,--fst-file",fstFile,fs("output fst data file will be generated."))->check(CLI::NonexistentPath)->required(true);
+        mapSubCmd->add_option("-c,--cache-size",maxCacheSize,fs("max cache size used with unit MB bytes,default 1000M if not set"))->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
 
-        mapSubCmd->add_flag("-s,--sorted",isFileSorted,"Set this if the input data is already lexicographically sorted. This will make fst construction much faster.")->default_val(false)->required(false);
-        mapSubCmd->add_option("-w,--work-directory",workDir,"work directory specified for sort input dictionary file if necessary,default /tmp if not set")->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);
-        mapSubCmd->add_option("-t,--thread-count",threadNum,"threads count specified for sort input dictionary file if necessary,default 4 if not set")->default_val(4)->check(CLI::Range(1,32))->required(false);
-        mapSubCmd->add_option("-l,--split-file-count",splitFileNum,"count number of large file split specified for sort input dictionary file if necessary,default 8 if not set")->default_val(6)->check(CLI::Range(1,1000))->required(false);
-        mapSubCmd->add_option("-p,--parallel-task-count",parallelTaskNum,"paralleled running task count for merge sorted intermediate files specified for sort input dictionary file if necessary, default 3 if not set")->default_val(3)->check(CLI::Range(2,20))->required(false);
+        mapSubCmd->add_flag("-s,--sorted",isFileSorted,fs("Set this if the input data is already lexicographically sorted. This will make fst construction much faster."))->default_val(false)->required(false);
+        mapSubCmd->add_option("-w,--work-directory",workDir,fs("work directory specified for sort input dictionary file if necessary,default /tmp if not set"))->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);
+        mapSubCmd->add_option("-t,--thread-count",threadNum,fs("threads count specified for sort input dictionary file if necessary,default 4 if not set"))->default_val(4)->check(CLI::Range(1,32))->required(false);
+        mapSubCmd->add_option("-l,--split-file-count",splitFileNum,fs("count number of large file split specified for sort input dictionary file if necessary,default 8 if not set"))->default_val(6)->check(CLI::Range(1,1000))->required(false);
+        mapSubCmd->add_option("-p,--parallel-task-count",parallelTaskNum, fs("paralleled running task count for merge sorted intermediate files specified for sort input dictionary file if necessary, default 3 if not set"))->default_val(3)->check(CLI::Range(2,20))->required(false);
     }
     if (setSubCmd) {
-        setSubCmd->add_option("-f,--dict-file",dictFile,"dictionary file which with format like:`key,value` for every line.")->check(CLI::ExistingFile)->required(true);
-        setSubCmd->add_option("-o,--fst-file",fstFile,"output fst data file will be generated.")->check(CLI::NonexistentPath)->required(true);
-        setSubCmd->add_option("-c,--cache-size",maxCacheSize,"max cache size used with unit MB bytes,default 1000M if not set")->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
+        setSubCmd->add_option("-f,--dict-file",dictFile,fs("dictionary file which with format like:`key,value` for every line."))->check(CLI::ExistingFile)->required(true);
+        setSubCmd->add_option("-o,--fst-file",fstFile,fs("output fst data file will be generated."))->check(CLI::NonexistentPath)->required(true);
+        setSubCmd->add_option("-c,--cache-size",maxCacheSize, fs("max cache size used with unit MB bytes,default 1000M if not set"))->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
 
-        setSubCmd->add_flag("-s,--sorted",isFileSorted,"Set this if the input data is already lexicographically sorted. This will make fst construction much faster.")->default_val(false)->required(false);
-        setSubCmd->add_option("-w,--work-directory",workDir,"work directory specified for sort input dictionary file if necessary,default /tmp if not set")->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);
-        setSubCmd->add_option("-t,--thread-count",threadNum,"threads count specified for sort input dictionary file if necessary,default 4 if not set")->default_val(4)->check(CLI::Range(1,32))->required(false);
-        setSubCmd->add_option("-l,--split-file-count",splitFileNum,"count number of large file split specified for sort input dictionary file if necessary,default 8 if not set")->default_val(6)->check(CLI::Range(1,1000))->required(false);
-        setSubCmd->add_option("-p,--parallel-task-count",parallelTaskNum,"paralleled running task count for merge sorted intermediate files specified for sort input dictionary file if necessary, default 3 if not set")->default_val(3)->check(CLI::Range(2,20))->required(false);
+        setSubCmd->add_flag("-s,--sorted",isFileSorted,fs("Set this if the input data is already lexicographically sorted. This will make fst construction much faster."))->default_val(false)->required(false);
+        setSubCmd->add_option("-w,--work-directory",workDir,fs("work directory specified for sort input dictionary file if necessary,default /tmp if not set"))->default_val("/tmp")->check(CLI::ExistingDirectory)->required(false);
+        setSubCmd->add_option("-t,--thread-count",threadNum,fs("threads count specified for sort input dictionary file if necessary,default 4 if not set"))->default_val(4)->check(CLI::Range(1,32))->required(false);
+        setSubCmd->add_option("-l,--split-file-count",splitFileNum,fs("count number of large file split specified for sort input dictionary file if necessary,default 8 if not set"))->default_val(6)->check(CLI::Range(1,1000))->required(false);
+        setSubCmd->add_option("-p,--parallel-task-count",parallelTaskNum,fs("paralleled running task count for merge sorted intermediate files specified for sort input dictionary file if necessary, default 3 if not set"))->default_val(3)->check(CLI::Range(2,20))->required(false);
     }
     if (dotSubCmd) {
-        dotSubCmd->add_option("-f,--fst-file",fstFile,"fst data file constructed before.")->check(CLI::ExistingFile)->required(true);
-        dotSubCmd->add_option("-o,--dot-file",dotFile,"output dot file will be generated,which can be converted to png file using dot command like: dot -Tpng < a.dot > a.png, then you can view the picture generated.")->check(CLI::NonexistentPath)->required(true);
+        dotSubCmd->add_option("-f,--fst-file",fstFile,fs("fst data file constructed before."))->check(CLI::ExistingFile)->required(true);
+        dotSubCmd->add_option("-o,--dot-file",dotFile,fs("output dot file will be generated,which can be converted to png file using dot command like: dot -Tpng < a.dot > a.png, then you can view the picture generated."))->check(CLI::NonexistentPath)->required(true);
     }
     if (matchQuerySubCmd) {
-        matchQuerySubCmd->add_option("-f,--fst-file",fstFile,"fst data file constructed before.")->check(CLI::ExistingFile)->required(true);
-        matchQuerySubCmd->add_option("-s,--greater-than",gt,"only show results greater than this, indicates left unbound if not specified");
-        matchQuerySubCmd->add_option("-a,--greater-equal-than",ge,"only show results greater than OR EQUAL TO this, indicates left unbound if not specified");
-        matchQuerySubCmd->add_option("-e,--less-than",lt,"only show results less than this, indicates right unbound if not specified");
-        matchQuerySubCmd->add_option("-b,--less-equal-than",le,"only show results less than OR EQUAL TO this, indicates right unbound if not specified");
-        matchQuerySubCmd->add_option("-q,--match-str",matchstr,"string to be matched.")->required(true);
+        matchQuerySubCmd->add_option("-f,--fst-file",fstFile,fs("fst data file constructed before."))->check(CLI::ExistingFile)->required(true);
+        matchQuerySubCmd->add_option("-s,--greater-than",gt,fs("only show results greater than this, indicates left unbound if not specified"));
+        matchQuerySubCmd->add_option("-a,--greater-equal-than",ge,fs("only show results greater than OR EQUAL TO this, indicates left unbound if not specified"));
+        matchQuerySubCmd->add_option("-e,--less-than",lt,fs("only show results less than this, indicates right unbound if not specified"));
+        matchQuerySubCmd->add_option("-b,--less-equal-than",le,fs("only show results less than OR EQUAL TO this, indicates right unbound if not specified"));
+        matchQuerySubCmd->add_option("-q,--match-str",matchstr,fs("string to be matched."))->required(true);
     }
     if (prefixQuerySubCmd) {
-        prefixQuerySubCmd->add_option("-f,--fst-file",fstFile,"fst data file constructed before.")->check(CLI::ExistingFile)->required(true);
-        prefixQuerySubCmd->add_option("-s,--greater-than",gt,"only show results greater than this, indicates left unbound if not specified");
-        prefixQuerySubCmd->add_option("-a,--greater-equal-than",ge,"only show results greater than OR EQUAL TO this, indicates left unbound if not specified");
-        prefixQuerySubCmd->add_option("-e,--less-than",lt,"only show results less than this, indicates right unbound if not specified");
-        prefixQuerySubCmd->add_option("-b,--less-equal-than",le,"only show results less than OR EQUAL TO this, indicates right unbound if not specified");
-        prefixQuerySubCmd->add_option("-p,--prefix-str",prefixstr,"prefix string starts with to be searched.")->required(true);
+        prefixQuerySubCmd->add_option("-f,--fst-file",fstFile,fs("fst data file constructed before."))->check(CLI::ExistingFile)->required(true);
+        prefixQuerySubCmd->add_option("-s,--greater-than",gt,fs("only show results greater than this, indicates left unbound if not specified"));
+        prefixQuerySubCmd->add_option("-a,--greater-equal-than",ge,fs("only show results greater than OR EQUAL TO this, indicates left unbound if not specified"));
+        prefixQuerySubCmd->add_option("-e,--less-than",lt,fs("only show results less than this, indicates right unbound if not specified"));
+        prefixQuerySubCmd->add_option("-b,--less-equal-than",le,fs("only show results less than OR EQUAL TO this, indicates right unbound if not specified"));
+        prefixQuerySubCmd->add_option("-p,--prefix-str",prefixstr,fs("prefix string starts with to be searched."))->required(true);
     }
     if (rangeQuerySubCmd) {
-        rangeQuerySubCmd->add_option("-f,--fst-file",fstFile,"fst data file constructed before.")->check(CLI::ExistingFile)->required(true);
-        rangeQuerySubCmd->add_option("-s,--greater-than",gt,"only show results greater than this, indicates left unbound if not specified");
-        rangeQuerySubCmd->add_option("-a,--greater-equal-than",ge,"only show results greater than OR EQUAL TO this, indicates left unbound if not specified");
-        rangeQuerySubCmd->add_option("-e,--less-than",lt,"only show results less than this, indicates right unbound if not specified");
-        rangeQuerySubCmd->add_option("-b,--less-equal-than",le,"only show results less than OR EQUAL TO this, indicates right unbound if not specified");
+        rangeQuerySubCmd->add_option("-f,--fst-file",fstFile,fs("fst data file constructed before."))->check(CLI::ExistingFile)->required(true);
+        rangeQuerySubCmd->add_option("-s,--greater-than",gt,fs("only show results greater than this, indicates left unbound if not specified"));
+        rangeQuerySubCmd->add_option("-a,--greater-equal-than",ge,fs("only show results greater than OR EQUAL TO this, indicates left unbound if not specified"));
+        rangeQuerySubCmd->add_option("-e,--less-than",lt,fs("only show results less than this, indicates right unbound if not specified"));
+        rangeQuerySubCmd->add_option("-b,--less-equal-than",le,fs("only show results less than OR EQUAL TO this, indicates right unbound if not specified"));
     }
 
     if (fuzzyQuerySubCmd) {
-        fuzzyQuerySubCmd->add_option("-f,--fst-file",fstFile,"fst data file constructed before.")->check(CLI::ExistingFile)->required(true);
-        fuzzyQuerySubCmd->add_option("-z,--fuzzy-str",fuzzyStr,"string to be fuzzy matched.")->required(true);
-        fuzzyQuerySubCmd->add_option("-d,--distance",editDistance,"edit distance for levenshtein similarity search used.")->check(CLI::Range(0,100))->required(true);
-        fuzzyQuerySubCmd->add_option("-l,--prefix-len",fuzzyPrefixLen,"same prefix length ignored for levenshtein similarity search used.")->default_val(0);
+        fuzzyQuerySubCmd->add_option("-f,--fst-file",fstFile,fs("fst data file constructed before."))->check(CLI::ExistingFile)->required(true);
+        fuzzyQuerySubCmd->add_option("-z,--fuzzy-str",fuzzyStr,fs("string to be fuzzy matched."))->required(true);
+        fuzzyQuerySubCmd->add_option("-d,--distance",editDistance,fs("edit distance for levenshtein similarity search used."))->check(CLI::Range(0,100))->required(true);
+        fuzzyQuerySubCmd->add_option("-l,--prefix-len",fuzzyPrefixLen,fs("same prefix length ignored for levenshtein similarity search used."))->default_val(0);
         fuzzyQuerySubCmd->add_flag("-m,--damerau-levenshtein",
                                    isUseDamerauLevenshtein,
-                                   "Set this if use Damerau-Levenshtein Distance to measure similarity. Levenshtein Distance will be used to measure similarity if not set this option.")->default_val(false)->required(false);
+                                   fs("Set this if use Damerau-Levenshtein Distance to measure similarity. Levenshtein Distance will be used to measure similarity if not set this option."))->default_val(false)->required(false);
     }
 
     CLI11_PARSE(app, argc, argv);

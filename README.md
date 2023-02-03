@@ -60,20 +60,32 @@ This FST C++ open source project Orchid-Fst has the following significant advant
 
 ```
 ofst: Orchid-Fst is a smart Fst command line tool
+
 Usage: ofst [OPTIONS] SUBCOMMAND
 
 Options:
-  -h,--help                             Print this help message and exit
+  -h,--help          Print this help message and exit
 
 Subcommands:
-  map                                   construct fst data file from a key-value(separated with comma   every line) dictionary file.
-  set                                   construct fst data file from a only key(no value) dictionary file.
-  dot                                   generate dot file from fst data file, which can be converted to png file using dot command like: dot -Tpng < a.dot > a.png, then you can view the picture generated.
-  match                                 execute accurate match query for a term text in the fst.
-  prefix                                execute prefix query starts with a term text in the fst.
-  range                                 execute range query in the fst.
-  fuzzy                                 execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance.
-
+  map                construct fst data file from a key-value(separated with comma 
+                     every line) dictionary file.
+                     
+  set                construct fst data file from a only key(no value) dictionary 
+                     file.
+                     
+  dot                generate dot file from fst data file, which can be converted 
+                     to png file using dot command like: dot -Tpng < a.dot > a.png,
+                     then you can view the picture generated.
+                     
+  match              execute accurate match query for a term text in the fst.
+                     
+  prefix             execute prefix query starts with a term text in the fst.
+                     
+  range              execute range query in the fst.
+                     
+  fuzzy              execute fuzzy query in the fst,it works by building a Levenshtein 
+                     or Damerau-Levenshtein automaton within a edit distance.
+                                   
 Please contact dingbinthu@163.com for related questions and other matters not covered. Enjoy it!
 
 ```
@@ -169,3 +181,4 @@ Note: Before running the command line tool, you need to place the logger.conf lo
 
 
 Please contact [dingbinthu@163.com](mailto:dingbinthu@163.com) for related questions and other matters not covered. Enjoy it.
+
