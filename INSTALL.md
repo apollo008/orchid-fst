@@ -11,19 +11,16 @@
 ```
 git clone https://github.com/apollo008/orchid-fst.git orchid-fst.git
 cd orchid-fst.git 
-vim src/CMakeLists.txt
-修改第11行从原来的set(${TOP_PROJECT_NAME_UPPER}_DEPEND_PREFIX_DIR $ENV{HOME}/local)   #need set改为 set(${TOP_PROJECT_NAME_UPPER}_DEPEND_PREFIX_DIR /home/xx/local)   #need set
 
 make build-dir
 cd build-dir
-cmake -DENABLE_BUILD_SHARE=ON ../src      #编译share,依赖库，cppunit和tulip
-rm -rf *    #重新清空build-dir目录下内容，开始编译orchid-fst工程
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/install  ../src
+sudo cmake -DENABLE_BUILD_SHARE=ON ../src      #编译share中的依赖库并安装到/usr/local，cppunit和tulip
+sudo rm -rf *    #重新清空build-dir目录下内容，开始编译orchid-fst工程
+cmake ../src
 make -j4
-make install
+sudo make install  # 生成fst和lfsort命令到/usr/local/bin目录下，分别运行--help可以了解用法
+sudo ldconfig
 make test    #运行单元测试
-接下来/path/to/install目录下即可生成fst和lfsort命令，分别运行--help可以了解用法
-
 ```
 
 ```

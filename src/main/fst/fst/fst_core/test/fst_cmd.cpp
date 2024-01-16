@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
     auto rangeQuerySubCmd = app.add_subcommand("range", fs("execute range query in the fst."));
     auto fuzzyQuerySubCmd = app.add_subcommand("fuzzy", fs("execute fuzzy query in the fst,it works by building a Levenshtein or Damerau-Levenshtein automaton within a edit distance."));
 
-    string dictFile, fstFile, dotFile, matchstr,prefixstr, gt,ge,lt,le,  fuzzyStr;
+    string dictFile, fstFile, dotFile, matchstr,prefixstr, gt,ge,lt,le,  fuzzyStr, delimiter;
     uint32_t editDistance, fuzzyPrefixLen;
     uint64_t maxCacheSize;
     bool isFileSorted;
@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
     uint32_t threadNum,splitFileNum, parallelTaskNum;
     if (mapSubCmd) {
         mapSubCmd->add_option("-f,--dict-file",dictFile,fs("dictionary file which with format like:`key,value` for every line."))->check(CLI::ExistingFile)->required(true);
+        mapSubCmd->add_option("-d,--delimiter",delimiter,fs("The delimiter used in the CSV file to separate key and value in each line. This defaults to ','."))->default_val(",")->required(false);
         mapSubCmd->add_option("-o,--fst-file",fstFile,fs("output fst data file will be generated."))->check(CLI::NonexistentPath)->required(true);
         mapSubCmd->add_option("-c,--cache-size",maxCacheSize,fs("max cache size used with unit MB bytes,default 1000M if not set"))->default_val(1000)->check(CLI::NonNegativeNumber)->required(false);
 
@@ -143,24 +144,29 @@ int main(int argc, char** argv) {
         while (getline(ifs,line)) {
             if (line.empty()) continue;
             vector<string> arr;
-            StringUtil::Split( line, ",",arr,false);
-            if (arr.size() < 2 && mapSubCmd->parsed()) {
-                TLOG_LOG(ERROR, "invalid input data line:[%s],items count < 2!omit it", line.c_str());
-                continue;
-            }
-            if (arr.size() < 1 && setSubCmd->parsed()) {
-                TLOG_LOG(ERROR, "invalid input data line:[%s],items count < 1!omit it", line.c_str());
-                continue;
-            }
-            string key = arr[0];
-//            TLOG_LOG(INFO,"key:[%s] in string,while [%ws] in wstring.",key.c_str(), s2ws(key).c_str());
+            char *key;
+            size_t key_len;
             uint64_t value = 0;
             if (mapSubCmd->parsed()) {
-                stringstream ss;
-                ss << arr[1];
-                ss >> value;
+                StringUtil::Split( line, delimiter, arr, false);
+                if (arr.size() != 2 && mapSubCmd->parsed()) {
+                    TLOG_LOG(ERROR, "invalid input data line:[%s],items count!=2! omit it", line.c_str());
+                    continue;
+                }
+                key = (char*)arr[0].c_str();
+                key_len = arr[0].size();
+                size_t pos;
+                value = std::stoull(arr[1], &pos, 10);
+                if (pos != arr[1].size()) {
+                    TLOG_LOG(ERROR, "invalid input data line:[%s],value is not a number! omit it", line.c_str());
+                    continue;
+                }
+                // TLOG_LOG(INFO,"key:[%s] in string,while [%ws] in wstring.",key.c_str(), s2ws(key).c_str());
+            } else {
+                key = (char*)line.c_str();
+                key_len = line.size();
             }
-            builder.Insert((uint8_t*)key.c_str(), strlen(key.c_str()),value);
+            builder.Insert((uint8_t*)key, key_len, value);
         }
         builder.Finish();
         outputStream->Close();
